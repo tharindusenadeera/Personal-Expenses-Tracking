@@ -1,15 +1,29 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Provider } from "react-redux";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import store from "./redux/store";
+import { DashboardLayout } from "./layouts/DashboardLayout";
+import { AddExpensesLayout } from "./layouts/AddExpensesLayout";
 
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
+  document.getElementById("root") as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <App>
+        <Router>
+          <Routes>
+            <Route path="/" element={<DashboardLayout />} />
+            <Route path="/add-expenses" element={<AddExpensesLayout />} />
+          </Routes>
+        </Router>
+      </App>
+    </Provider>
   </React.StrictMode>
 );
 
