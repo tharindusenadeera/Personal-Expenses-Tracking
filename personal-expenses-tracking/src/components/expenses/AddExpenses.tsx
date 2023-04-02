@@ -3,7 +3,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { Stack } from "@mui/system";
 import { Grid, TextField } from "@mui/material";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { ViewExpenses } from "./ViewExpenses";
 // import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 // import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -16,7 +16,7 @@ const style = {
   transform: "translate(-50%, -50%)",
   width: "50%",
   bgcolor: "background.paper",
-  boxShadow: 10,
+  boxShadow: 0,
   p: 4,
 };
 
@@ -32,7 +32,15 @@ export const AddExpenses = () => {
   const [description, setDescription] = useState<string>("");
   const [amount, setAmount] = useState<number>(0);
 
-  const handleClear = () => {};
+  const reset = () => {
+    setType("");
+    setDescription("");
+    setAmount(0);
+  };
+
+  const handleClear = () => {
+    reset();
+  };
   const handleSave = () => {
     const newItem: Expense = {
       type: type,
@@ -40,6 +48,7 @@ export const AddExpenses = () => {
       amount: amount,
     };
     setExpenses((prevItems) => [...prevItems, newItem]);
+    reset();
   };
 
   const handleType = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,6 +60,12 @@ export const AddExpenses = () => {
   const handleAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
     setAmount(parseFloat(event.target.value));
   };
+
+  const handleResetExpenses = () => {
+    setExpenses([]);
+  };
+
+  const handleSubmitExpenses = () => {};
 
   return (
     <>
@@ -83,7 +98,11 @@ export const AddExpenses = () => {
             />
           </LocalizationProvider> */}
 
-          <TextField placeholder="Amount" onChange={handleAmount} />
+          <TextField
+            type="number"
+            placeholder="Amount"
+            onChange={handleAmount}
+          />
         </Stack>
         <Stack direction="row" justifyContent="end" spacing={2}>
           <Button variant="outlined" onClick={handleClear}>
@@ -94,7 +113,15 @@ export const AddExpenses = () => {
           </Button>
         </Stack>
         <Grid container>
-          <ViewExpenses />
+          {expenses?.length > 0 ? (
+            <ViewExpenses
+              expenseArr={expenses}
+              handleReset={handleResetExpenses}
+              handleSubmit={handleSubmitExpenses}
+            />
+          ) : (
+            <Fragment></Fragment>
+          )}
         </Grid>
       </Box>
     </>
